@@ -6,7 +6,8 @@ import imp
 import threading
 import atexit
 
-subdomain = imp.load_source('subdomain', './modules/subdomains.py')
+import modules.subdomains as subdomains
+# subdomains = imp.load_source('subdomains', './modules/subdomains.py')
 
 app = Flask(__name__)
 
@@ -31,7 +32,7 @@ def generate():
 
     things.append(domainObj)
 
-    subdomain.run(domainObj)
+    subdomains.run(domainObj)
 
     return redirect("/status/" + id, code=302)
 
@@ -44,7 +45,9 @@ def status(domain_id):
     if object is None:
         return '404 not found'
     print object
-    return render_template('status.html', domain=object)
+    subdomains = open(object['domain']).read().split('\n')
+
+    return render_template('status.html', domain=object, subdomains=subdomains)
 
 @app.route('/static/<path:path>')
 def send_static(path):

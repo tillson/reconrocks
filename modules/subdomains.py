@@ -1,12 +1,23 @@
-import subbrute
+from subprocess import Popen, PIPE
+from threading import Thread, Timer
+from Queue import Queue, Empty
+import sys
 
-from celery import Celery
+ON_POSIX = 'posix' in sys.builtin_module_names
 
-app = Celery('subbrute', broker='amqp://guest@localhost//')
-
-@app.task
 def run(domain_object):
-    domain_object['subdomains'] = []
-    for d in subbrute.run(domain_object['domain'], subdomains='./util/names_small.txt'):
-        domain_object['subdomains'].append(d)
-        print d
+    execute(domain_object['domain'], './')
+
+def enqueue_output(out, queue):
+    for line in iter(out.readline, b''):
+        queue.put(line)
+    out.close()
+
+def execute(cmd,path):
+    # Ironically, this is vulnerable to command injection.
+    p = Popen(['subbrute ' + cmd + ' > ~/Documents/cybersecure/' + cmd], stdout=PIPE, bufsize=1, shell=True, close_fds=ON_POSIX, cwd=path)
+    q = Queue()
+    print(p)
+    t = Thread(target=enqueue_output, args=(p.stdout, q))
+    t.daemon = True # thread dies with the program
+    t.start()
