@@ -24,10 +24,16 @@ def index():
 
 @app.route("/generate", methods = ['POST'])
 def generate():
+
+
+
     # request.form['domain'] = 'https://google.com'
     domain = request.form['urlToTest']
     if '//' in domain:
         domain = domain.split('//')[1].replace('www.', '').strip(';').strip('|')
+
+    open(domain + ".json","a+")
+    open(domain + "","a+")
 
     id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
 
@@ -52,14 +58,22 @@ def status(domain_id):
     print object
     recon.report(object['domain'])
 
-    subdomains = open(object['domain'], 'w+').read().split('\n')
+    subdomains = open(object['domain']).read().split('\n')
+    print subdomains
     data = None
-    with open(object['domain'] + '.json', 'w+') as data_file:
+    # recon = json.loads()
+    with open(object['domain'] + '.json') as data_file:
+        print data_file
         try:
             data = json.load(data_file)
         except:
             print "except"
         return render_template('status.html', domain=object, subdomains=subdomains, recon=data)
+
+@app.route('/nmap/<host>')
+def nmap_vis(host):
+    return render_template('nmap.html', host=host)
+
 
 @app.route('/static/<path:path>')
 def send_static(path):
@@ -73,4 +87,4 @@ def get_nmap(host):
 if __name__ == "__main__":
 
 
-    app.run(threaded=True)
+    app.run(threaded=True,port=80)

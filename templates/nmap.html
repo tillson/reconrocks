@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>nmap output for {{ host }}</title>
+  <meta charset="utf-8">
+  <meta name="author" content="Tillson Galloway and The NoiseHub Team">
+  <meta name="keywords" content="PenTest, ReconRocks, Recon, Security Testing">
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata|Khula" rel="stylesheet">
+  <link href='/static/css/style1.css' rel='stylesheet' type='text/css'>
+  <link href="/static/css/bootstrap.css" rel="stylesheet">
+</head>
+<body style="background-color: #000000;">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+   <!-- Include all compiled plugins (below), or include individual files as needed -->
+   <script src="/static/js/bootstrap.min.js"></script>
+   <script>
+   $('#tabs a').click(function (e) {
+     e.preventDefault()
+     $(this).tab('show')
+   })
+  </script>
+
+    <h1 class="result_h" style="color: #3BFC34;">nmap output: {{ host }}<br>
+    <small id="stillwaiting" color="white">One moment, scanning for all open ports...</small></h1>
+    <br>
+    <div id="output">
+
+    </div>
+
+    <script>
+    $.get('/api/nmap/{{ host }}', function(data) {
+      $('#stillwaiting').hide()
+      data = jQuery.parseJSON(data);
+      console.log(data);
+      var html = '<h3 style="color:white;margin-left:30%">Server is ' + data['status']['state'] + "</h3>";
+      html += '<table class="contact_t" style="width:40%; margin-left:30%"><thead style="color:white;"><tr><td>Port</td><td>Service</td></tr></thead>';
+      for (var i = 0; i < Object.keys(data['tcp']).length; i++) {
+        var port = Object.keys(data['tcp'])[i];
+        html += '<tr class="contact_tr">';
+        html += '<td class="contact_td">' + port + '</td>';
+        html += '<td class="contact_td">' + data['tcp'][Object.keys(data['tcp'])[i]]['name']; + '</td>';
+        html += '</tr>';
+      }
+      html += '</table>';
+      $('#output').html(html);
+
+    });
+    </script>
+
+</body>
+</html>

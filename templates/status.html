@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>results for domain name</title>
+  <title>results for {{ domain['domain' ]}}</title>
   <meta charset="utf-8">
   <meta name="author" content="Tillson Galloway and The NoiseHub Team">
   <meta name="keywords" content="PenTest, ReconRocks, Recon, Security Testing">
   <link href="https://fonts.googleapis.com/css?family=Inconsolata|Khula" rel="stylesheet">
-  <link href='static/style.css' rel='stylesheet' type='text/css'>
-  <link href="static/css/bootstrap.css" rel="stylesheet">
+  <link href='/static/css/style1.css' rel='stylesheet' type='text/css'>
+  <link href="/static/css/bootstrap.css" rel="stylesheet">
 </head>
 <body style="background-color: #000000;">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
    <!-- Include all compiled plugins (below), or include individual files as needed -->
-   <script src="static/js/bootstrap.min.js"></script>
+   <script src="/static/js/bootstrap.min.js"></script>
    <script>
    $('#tabs a').click(function (e) {
      e.preventDefault()
@@ -20,14 +20,15 @@
    })
   </script>
 
-    <h1 class="result_h">results for domain name: </h1>
-
+    <h1 class="result_h" style="color: #3BFC34;">results for {{ domain['domain' ]}}:<br>
+    <small style="color:white;">Still updating, check back periodically for more results</small> </h1>
+    <br>
    <div>
 
      <!-- Nav tabs -->
      <ul id="tabs" class="nav nav-tabs" role="tablist">
        <li role="presentation" class="active"><a href="#domains" aria-controls="domains" role="tab" data-toggle="tab">domains</a></li>
-       <li role="presentation"><a href="#subdirectory" aria-controls="subdirectory" role="tab" data-toggle="tab">subdirectory</a></li>
+       <!-- <li role="presentation"><a href="#subdirectory" aria-controls="subdirectory" role="tab" data-toggle="tab">subdirectory</a></li> -->
        <li role="presentation"><a href="#vul" aria-controls="vul" role="tab" data-toggle="tab">vulnerabilites</a></li>
        <li role="presentation"><a href="#contacts" aria-controls="contacts" role="tab" data-toggle="tab">contacts</a></li>
      </ul>
@@ -38,15 +39,16 @@
      <div class="tab-content">
        <div role="tabpanel" class="tab-pane active" id="domains">
          <table class="domain_t">
-           <tr class="domain_tr">
-             <td class="domain_td first_domain_td">domain name 1</td>
-           </tr>
-           <tr class="domain_tr">
-             <td class="domain_td">domain name 2</td>
-           </tr>
+           <thead><tr><td>Subdomain</td></tr></thead>
+           {% for subdomain in subdomains %}
+             <tr class="domain_tr">
+               <td class="domain_td">{{ subdomain }}</td>
+               <td class="domain_td"><a target="_blank" href="/nmap/{{subdomain}}">view portscan</a></td>
+             </tr>
+           {% endfor %}
          </table>
        </div>
-       <div role="tabpanel" class="tab-pane" id="subdirectory">
+       <!-- <div role="tabpanel" class="tab-pane" id="subdirectory">
          <table class="subdirectory_t">
            <tr class="subdirectory_tr">
              <td class="subdirectory_td first_subdirectory_td">root/</td>
@@ -58,26 +60,30 @@
              <td class="subdirectory_td">scripts/</td>
            </tr>
          </table>
-       </div>
+       </div> -->
        <div role="tabpanel" class="tab-pane" id="vul">
          <table class="vul_t">
-           <tr class="vul_tr">
-             <td class="vul_td first_vul_td">bruteforcing</td>
-           </tr>
-           <tr class="vul_tr">
-             <td class="vul_td">passwords hidden in the code</td>
-           </tr>
+           <thead><tr><td>Category</td><td>Host</td><td>Publish Date</td><td>Reference</td></tr></thead>
+           {% for vulnerability in recon['vulnerabilities'] %}
+             <tr class="vul_tr">
+               <td class="vul_td first_vul_td">{{ vulnerability['category'] }}</td>
+               <td class="vul_td first_vul_td">{{ vulnerability['host'] }}</td>
+               <td class="vul_td first_vul_td">{{ vulnerability['publish_date'].split(' ')[0] }}</td>
+               <td class="vul_td first_vul_td"><a target="_blank" href="{{ vulnerability['reference'] }}">Reference</a></td>
+             </tr>
+           {% endfor %}
          </table>
        </div>
        <div role="tabpanel" class="tab-pane" id="contacts">
          <table class="contact_t">
+           <thead><tr><td>Name</td><td>Email</td></tr></thead>
            <tr class="contact_tr">
-             <td class="contact_td first_contact_td">Tillson G | tillson.galloway@gmail.com |
-              717-777-7777</td>
-           </tr>
-           <tr class="contact_tr">
-             <td class="contact_td">Tillson Gallo | tillson.galloway2@gmail.com | 777-123-4567</td>
-           </tr>
+             {% for contact in recon['contacts'] %}
+             <tr class="contact_tr">
+               <td class="contact_td">{{ contact['first_name'] }} {{ contact['last_name'] }}</td>
+               <td class="contact_td">{{ contact['email'] }}</td>
+             </tr>
+             {% endfor %}
          </table>
        </div>
      </div>

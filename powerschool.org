@@ -1,0 +1,3 @@
+_xmpp-client._udp.powerschool.org
+_xmpp-server._tcp.powerschool.org
+ww5.powerschool.org
