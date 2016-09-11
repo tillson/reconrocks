@@ -1,8 +1,0 @@
-eduspire.org
-www.eduspire.org
-_domainkey.eduspire.org
-admin.eduspire.org
-mail.eduspire.org
-webmail.eduspire.org
-ns1.eduspire.org
-cpanel.eduspire.org
