@@ -5,8 +5,10 @@ import string
 import imp
 import threading
 import atexit
+import json
 
 import modules.subdomains as subdomains
+import modules.recon as recon
 # subdomains = imp.load_source('subdomains', './modules/subdomains.py')
 
 app = Flask(__name__)
@@ -21,7 +23,7 @@ def index():
 @app.route("/generate", methods = ['GET'])
 def generate():
     # request.form['domain'] = 'https://google.com'
-    domain = 'https://google.com'
+    domain = 'https://portergaud.edu'
     if '//' in domain:
         domain = domain.split('//')[1].replace('www.', '')
 
@@ -33,6 +35,7 @@ def generate():
     things.append(domainObj)
 
     subdomains.run(domainObj)
+    recon.run(domainObj)
 
     return redirect("/status/" + id, code=302)
 
@@ -45,9 +48,14 @@ def status(domain_id):
     if object is None:
         return '404 not found'
     print object
-    subdomains = open(object['domain']).read().split('\n')
+    recon.report(object['domain'])
 
-    return render_template('status.html', domain=object, subdomains=subdomains)
+    subdomains = open(object['domain']).read().split('\n')
+    data = None
+    with open(object['domain'] + '.json') as data_file:
+        data = json.load(data_file)
+
+    return render_template('status.html', domain=object, subdomains=subdomains, recon=data)
 
 @app.route('/static/<path:path>')
 def send_static(path):
