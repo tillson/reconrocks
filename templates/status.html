@@ -1,13 +1,138 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>recon_status</title>
-    <meta charset="utf-8">
-    <link href="https://fonts.googleapis.com/css?family=Inconsolata|Khula|Roboto+Mono" rel="stylesheet">
-    <link href='../static/css/status.css' rel='stylesheet' type='text/css'>
+  <title>results for domain name</title>
+  <meta charset="utf-8">
+  <meta name="author" content="Tillson Galloway and The NoiseHub Team">
+  <meta name="keywords" content="PenTest, ReconRocks, Recon, Security Testing">
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata|Khula" rel="stylesheet">
+  <link href='static/style.css' rel='stylesheet' type='text/css'>
+  <link href="static/css/bootstrap.css" rel="stylesheet">
 </head>
 <body style="background-color: #000000;">
-  <p class="main_h">status: {{ domain['domain'] }}</p>
-</center>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+   <!-- Include all compiled plugins (below), or include individual files as needed -->
+   <script src="static/js/bootstrap.min.js"></script>
+   <script>
+   $('#tabs a').click(function (e) {
+     e.preventDefault()
+     $(this).tab('show')
+   })
+  </script>
+
+    <h1 class="result_h">results for domain name: </h1>
+
+   <div>
+
+     <!-- Nav tabs -->
+     <ul id="tabs" class="nav nav-tabs" role="tablist">
+       <li role="presentation" class="active"><a href="#domains" aria-controls="domains" role="tab" data-toggle="tab">domains</a></li>
+       <li role="presentation"><a href="#subdirectory" aria-controls="subdirectory" role="tab" data-toggle="tab">subdirectory</a></li>
+       <li role="presentation"><a href="#vul" aria-controls="vul" role="tab" data-toggle="tab">vulnerabilites</a></li>
+       <li role="presentation"><a href="#contacts" aria-controls="contacts" role="tab" data-toggle="tab">contacts</a></li>
+     </ul>
+
+
+     <!-- Tab panes -->
+     <center>
+     <div class="tab-content">
+       <div role="tabpanel" class="tab-pane active" id="domains">
+         <table class="domain_t">
+           <tr class="domain_tr">
+             <td class="domain_td first_domain_td">domain name 1</td>
+           </tr>
+           <tr class="domain_tr">
+             <td class="domain_td">domain name 2</td>
+           </tr>
+         </table>
+       </div>
+       <div role="tabpanel" class="tab-pane" id="subdirectory">
+         <table class="subdirectory_t">
+           <tr class="subdirectory_tr">
+             <td class="subdirectory_td first_subdirectory_td">root/</td>
+           </tr>
+           <tr class="subdirectory_tr">
+             <td class="subdirectory_td">images/</td>
+           </tr>
+           <tr class="subdirectory_tr">
+             <td class="subdirectory_td">scripts/</td>
+           </tr>
+         </table>
+       </div>
+       <div role="tabpanel" class="tab-pane" id="vul">
+         <table class="vul_t">
+           <tr class="vul_tr">
+             <td class="vul_td first_vul_td">bruteforcing</td>
+           </tr>
+           <tr class="vul_tr">
+             <td class="vul_td">passwords hidden in the code</td>
+           </tr>
+         </table>
+       </div>
+       <div role="tabpanel" class="tab-pane" id="contacts">
+         <table class="contact_t">
+           <tr class="contact_tr">
+             <td class="contact_td first_contact_td">Tillson G | tillson.galloway@gmail.com |
+              717-777-7777</td>
+           </tr>
+           <tr class="contact_tr">
+             <td class="contact_td">Tillson Gallo | tillson.galloway2@gmail.com | 777-123-4567</td>
+           </tr>
+         </table>
+       </div>
+     </div>
+
+   </div>
+ </center>
+
+
+  <!---
+  <center>
+    <div class="tableNav">
+      <p class="navItem"> <a href="" class="navLink">domains</a> | <a href="" class="navLink">subdirectory</a> | <a href="" class="navLink">vulnerabilites</a> | <a href="" class="navLink">contacts</a></p>
+    </div>
+  </center>
+  <table class="domain_t">
+    <tr class="domain_tr">
+      <td class="domain_td first_domain_td">domain name 1</td>
+    </tr>
+    <tr class="domain_tr">
+      <td class="domain_td">domain name 2</td>
+    </tr>
+  </table>
+
+  <table class="subdirectory_t">
+    <tr class="subdirectory_tr">
+      <td class="subdirectory_td first_subdirectory_td">root/</td>
+    </tr>
+    <tr class="subdirectory_tr">
+      <td class="subdirectory_td">images/</td>
+    </tr>
+    <tr class="subdirectory_tr">
+      <td class="subdirectory_td">scripts/</td>
+    </tr>
+  </table>
+
+  <table class="vul_t">
+    <tr class="vul_tr">
+      <td class="vul_td first_vul_td">bruteforcing</td>
+    </tr>
+    <tr class="vul_tr">
+      <td class="vul_td">passwords hidden in the code</td>
+    </tr>
+  </table>
+
+  <table class="contact_t">
+    <tr class="contact_tr">
+      <td class="contact_td first_contact_td">Tillson G | tillson.galloway@gmail.com |
+       717-777-7777</td>
+    </tr>
+    <tr class="contact_tr">
+      <td class="contact_td">Tillson Gallo | tillson.galloway2@gmail.com | 777-123-4567</td>
+    </tr>
+  </table>
+
+-->
+
 </body>
 </html>

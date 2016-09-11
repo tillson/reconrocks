@@ -9,6 +9,8 @@ import json
 
 import modules.subdomains as subdomains
 import modules.recon as recon
+import modules.nmapper as nmapper
+import modules.dirbust as dirbust
 # subdomains = imp.load_source('subdomains', './modules/subdomains.py')
 
 app = Flask(__name__)
@@ -20,12 +22,12 @@ def index():
     return render_template('index.html')
 
 
-@app.route("/generate", methods = ['GET'])
+@app.route("/generate", methods = ['POST'])
 def generate():
     # request.form['domain'] = 'https://google.com'
-    domain = 'https://portergaud.edu'
+    domain = request.form['urlToTest']
     if '//' in domain:
-        domain = domain.split('//')[1].replace('www.', '')
+        domain = domain.split('//')[1].replace('www.', '').strip(';').strip('|')
 
     id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
 
@@ -36,7 +38,7 @@ def generate():
 
     subdomains.run(domainObj)
     recon.run(domainObj)
-
+    # dirbust.run.apply_async(args=[domainObj])
     return redirect("/status/" + id, code=302)
 
 @app.route("/status/<domain_id>")
@@ -50,18 +52,25 @@ def status(domain_id):
     print object
     recon.report(object['domain'])
 
-    subdomains = open(object['domain']).read().split('\n')
+    subdomains = open(object['domain'], 'w+').read().split('\n')
     data = None
-    with open(object['domain'] + '.json') as data_file:
-        data = json.load(data_file)
-
-    return render_template('status.html', domain=object, subdomains=subdomains, recon=data)
+    with open(object['domain'] + '.json', 'w+') as data_file:
+        try:
+            data = json.load(data_file)
+        except:
+            print "except"
+        return render_template('status.html', domain=object, subdomains=subdomains, recon=data)
 
 @app.route('/static/<path:path>')
 def send_static(path):
     return send_from_directory('static', path)
 
+@app.route("/api/nmap/<host>", methods = ['GET'])
+def get_nmap(host):
+    output = nmapper.run(host)
+    return json.dumps(output)
+
 if __name__ == "__main__":
 
 
-    app.run()
+    app.run(threaded=True)
